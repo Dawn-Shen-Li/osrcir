@@ -1,4 +1,4 @@
-from cloudgpt_aoai import get_chat_completion, encode_image
+from cloudgpt_aoai_Azure import get_chat_completion, encode_image
 from tenacity import retry, stop_after_attempt, wait_random_exponential, retry_if_exception_type
 import time
 import random

@@ -148,6 +148,18 @@ After downloading the dataset, ensure that the folder structure matches the foll
 #### GeneCIS
 Setup the GeneCIS benchmark following the instructions in the [**official repository**](https://github.com/facebookresearch/genecis). You would need to download images from the MS-COCO 2017 validation set and from the VisualGenome1.2 dataset. 
 
+```python
+# -----------------
+# Dataset paths
+# -----------------
+# GeneCIS splits
+genecis_root = '/home/shenli/Projects/genecis/genecis'                       # Path to GeneCIS templates (/project/dir/genecis)
+
+# GeneCIS base datasets
+visual_genome_images = '/datasets01/VisualGenome1.2/061517/VG_100K_all'     # Version 1.2, all images
+coco_root = '/data/coco/images/val2017'                               # 2017 validation images
+
+```
 ---
 
 ## Running OSrCIR on all Datasets

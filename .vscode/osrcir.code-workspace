@@ -1,0 +1,21 @@
+{
+	"folders": [
+		{
+			"name": "osrcir",
+			"path": ".."
+		},
+		{
+			"name": "genecis",
+			"path": "../../genecis"
+		},
+		{
+			"name": "nlvr",
+			"path": "../../nlvr"
+		},
+		{
+			"name": "data",
+			"path": "../../../../../data"
+		}
+	],
+	"settings": {}
+}

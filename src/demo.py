@@ -18,9 +18,9 @@ import PIL
 def parser_args():
     parser = argparse.ArgumentParser('')
 
-    parser.add_argument("--preload", nargs='+', type=str, default=['img_features','captions','mods'],
+    parser.add_argument("--preload", nargs='+', type=str, choices=['img_features','captions','mods'],
                         help='List of properties to preload is computed once before.')
-    parser.add_argument("--preload_path", nargs='+', type=str, default=r"C:\Users\v-yuantang\OneDrive\DKI\chatcir",
+    parser.add_argument("--preload_path", nargs='+', type=str, default="./",
                         help='preload file path.')
     # Base Model Choices
     parser.add_argument("--clip", type=str, default='ViT-B/32',
@@ -44,7 +44,7 @@ def parser_args():
     parser.add_argument("--gpt_cir_prompt", default='prompts.mllm_structural_modifier_prompt_fashion', type=str, choices=available_prompts,
                         help='Denotes the base prompt to use alongside GPT4V. Has to be available in prompts.py')
     parser.add_argument("--openai_engine", default='gpt-35-turbo-1106', type=str,
-                        choices=[   "gpt-35-turbo-20220309",
+                        choices=[   "gpt-35-turbo-20220309", # LLM
                                     "gpt-35-turbo-16k-20230613",
                                     "gpt-35-turbo-20230613",
                                     "gpt-35-turbo-1106",
@@ -52,17 +52,19 @@ def parser_args():
                                     "gpt-4-20230613",
                                     "gpt-4-32k-20230321",
                                     "gpt-4-32k-20230613",
-                                    "gpt-4-1106-preview",
+                                    "gpt-4-1106-preview", # MLLM afterwards
                                     "gpt-4-0125-preview",
                                     "gpt-4-visual-preview",
-                                    "gpt-4-turbo-20240409",
-                                    "gpt-4o-20240513",
+                                    "gpt-4-turbo-20240409", 
+                                    "gpt-4o-20240513",     
                                     "gpt-4o-20240806",
                                     "gpt-4o-mini-20240718",],
                         help='Openai LLM Engine to use.')
 
     parser.add_argument("--batch_size", default=32, type=int,
                         help='Batch size to use.')
+    parser.add_argument("--device", default=0, type=int,
+                        help='Device to use for evaluation. Default: 0 (first GPU).')
     args = parser.parse_args()
     return args
 
@@ -191,7 +193,7 @@ def OSrCIR(device: torch.device, args: argparse.Namespace, query_dataset: torch.
 if __name__ == "__main__":
     # --- Set Device.
     termcolor.cprint(f'Starting evaluation on {args.dataset.upper()} (split: {args.split})\n', color='green', attrs=['bold'])
-    device = torch.device(f"cuda:{args.device}" if torch.cuda.is_available() else "cpu")
+    device = torch.device(f"cuda:0" if torch.cuda.is_available() else "cpu")
 
     # --- Load Evaluation Datasets.
     target_datasets, query_datasets, pairings = [], [], []
@@ -232,7 +234,11 @@ if __name__ == "__main__":
         pairings.append('default')
 
     # --- get predeal dicts from each stage
-    preload_dict = get_predeal_dict()
+    if args.preload is None or len(args.preload) == 0:
+        termcolor.cprint('No preloading requested. Proceeding without preloading.', color='red', attrs=['bold'])
+        preload_dict = {'img_features': None, 'captions': None, 'mods': None}
+    else:
+        preload_dict = get_predeal_dict()
 
     # --- Evaluate performances.
     for query_dataset, target_dataset, pairing in zip(query_datasets, target_datasets, pairings):

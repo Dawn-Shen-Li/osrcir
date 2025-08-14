@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debugger: demo",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "src/demo.py",
+            "args": [
+                "--dataset",
+                "cirr",
+                "--split",
+                "test",
+                "--dataset-path",
+                "/data/CIRR",
+                "--gpt_cir_prompt",
+                "prompts.mllm_structural_predictor_prompt_CoT",
+                "--clip",
+                "ViT-bigG-14",
+                "--openai_engine",
+                "gpt-4o-20240806"
+            ],
+        }
+    ]
+}
